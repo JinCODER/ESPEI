@@ -12,21 +12,21 @@
 JSON格式
 ===========
 
-ESPEI has a single input style in JSON format that is used for all data entry.
-For those unfamiliar with JSON, it is fairly similar to Python dictionaries with some rigid requirements
+ESPEI使⽤JSON格式的单⼀输入样式来进⾏所有数据录入。
+对于不熟悉JSON的⼈来说，它与Python字典非常相似，但有⼀些严格的要求
 
-	•	All string quotes must be double quotes. Use ``"key"`` instead of ``'key'``.
-	•	Numbers should not have leading zeros. ``00.123`` should be ``0.123`` and ``012.34`` must be ``12.34``.
-	•	Lists and nested key-value pairs cannot have trailing commas. ``{"nums": [1,2,3,],}`` is invalid and should be ``{"nums": [1,2,3]}``.
+	•	所有的字符串引号必须是双引号。使用 ``"key"`` 而不是 ``'key'``。
+	•	数字不能有前导零。 ``00.123`` 应该写成 ``0.123`` 并且 ``012.34`` 必须写成 ``12.34``。
+	•	列表和嵌套的键值对不能有尾逗号。 ``{"nums": [1,2,3,],}`` 是无效的，应该写成 ``{"nums": [1,2,3]}``。
 
-These errors can be challenging to track down, particularly if you are only reading the JSON error messages in Python.
-A visual editor is encouraged for debugging JSON files such as `JSONLint`_.
-A quick reference to the format can be found at `Learn JSON in Y minutes <https://learnxinyminutes.com/docs/json/>`_.
+这些错误在Python中的JSON错误消息中可能很难追踪到。
+ 建议使⽤可视化编辑器来调试JSON文件，如 `JSONLint`_。
+可以在此处快速地找到json格式参考 `Learn JSON in Y minutes <https://learnxinyminutes.com/docs/json/>`_。
 
-ESPEI has support for checking all of your input datasets for errors, which you should always use before you attempt to run ESPEI.
-This error checking will report all of the errors at once and all errors should be fixed.
-Errors in the datasets will prevent fitting.
-To check the datasets at path ``my-input-data/`` you can run ``espei --check-datasets my-input-data``.
+ESPEI⽀持检查所有输入数据集的错误，在运⾏ESPEI之前应始终使⽤该功能。
+此错误检查将⼀次性报告所有错误，所有错误都应该修复。
+数据集中的错误将阻⽌拟合。
+通过运行 ``espei --check-datasets my-input-data`` 来检查路径 ``my-input-data/`` 中的数据集。
 
 .. _JSONLint: https://jsonlint.com
 
@@ -35,28 +35,28 @@ To check the datasets at path ``my-input-data/`` you can run ``espei --check-dat
 描述相
 ==================
 
-The JSON file for describing CALPHAD phases is conceptually similar to a setup file in Thermo-Calc's PARROT module.
-At the top of the file there is the ``refdata`` key that describes which reference state you would like to choose.
-Currently the reference states are strings referring to dictionaries in ``pycalphad.refdata`` only ``"SGTE91"`` is implemented.
+描述CALPHAD相的JSON文件在概念上类似于Thermo-Calc的PARROT模块中的setup文件。
+文件顶部有一个 ``refdata`` 键， ，⽤于描述您想要选择的参考态。
+当前的参考态是指向 ``pycalphad.refdata`` 字典中的字典的字符串，目前只实现了 ``"SGTE91"``。
 
-Each phase is described with the phase name as they key in the dictionary of phases.
-The details of that phase is a dictionary of values for that key.
-There are 4 possible entries to describe a phase: ``sublattice_model``, ``sublattice_site_ratios``, ``equivalent_sublattices``, and ``aliases``.
-``sublattice_model`` is a list of lists, where each internal list contains all of the components in that sublattice.
-The ``BCC_B2`` sublattice model is  ``[["AL", "NI", "VA"], ["AL", "NI", "VA"], ["VA"]]``, thus there are three sublattices where the first two have Al, Ni, and vacancies.
-``sublattice_site_ratios`` should be of the same length as the sublattice model (e.g. 3 for ``BCC_B2``).
-The sublattice site ratios can be fractional or integers and do not have to sum to unity.
+每个相都使⽤相名称作为字典的键来进⾏描述。
+该相的详细信息是该键的值的字典。
+描述相有4个可能的条⽬： ``sublattice_model``， ``sublattice_site_ratios``， ``equivalent_sublattices``和 ``aliases``。
+``sublattice_model`` 是一个列表的列表, 其中每个内部列表包含该亚点阵的所有组分。
+``BCC_B2`` 的亚点阵模型是  ``[["AL", "NI", "VA"], ["AL", "NI", "VA"], ["VA"]]``， 因此有三个亚点阵，前两个有Al、Ni和空位。
+``sublattice_site_ratios`` 应该与亚点阵模型长度相同 （例. ``BCC_B2`` 的 ``sublattice_site_ratios`` 为3）。
+亚点阵的站点比例可以是分数或整数，不必总和为1。
 
-The optional ``equivalent_sublattices`` key is a list of lists that describe which sublattices are symmetrically equivalent.
-Each sub-list in ``equivalent_sublattices`` describes the indices (zero-indexed) of sublattices that are equivalent.
-For ``BCC_B2`` the equivalent sublattices are ``[[0, 1]]``, meaning that the sublattice at index 0 and index 1 are equivalent.
-There can be multiple different sets (multiple sub-lists) of equivalent sublattices and there can be many equivalent sublattices within a sublattice (see ``FCC_L12``).
-If no ``equivalent_sublattice`` key exists, it is assumed that there are none.a
+可选的 ``equivalent_sublattices`` 键是描述哪些亚点阵在对称上是等效的列表的列表。
+``equivalent_sublattices`` 中的每个子列表描述了等效的亚点阵的索引（从零开始）。
+对于 ``BCC_B2`` ，等效亚点阵是 ``[[0, 1]]``， 这意味着索引为0和1的亚点阵是等效的。
+在⼀个亚点阵中可以有多个不同的等效亚点阵集合（多个⼦列表），并且在⼀个亚点阵中可以有多个等效亚点阵 （参见 ``FCC_L12``）。
+如果不存在 ``equivalent_sublattice`` 键，则假定没有等效亚点阵。
 
-Finally, the ``aliases`` key is used to refer to other phases that this sublattice model can describe when symmetry is accounted for.
-Aliases are used here to describe the ``BCC_A2`` and ``FCC_A1``, which are the disordered phases of ``BCC_B2`` and ``FCC_L12``, respectively.
-Notice that the aliased phases are not otherwise described in the input file.
-Multiple phases can exist with aliases to the same phase, e.g. ``FCC_L12`` and ``FCC_L10`` can both have ``FCC_A1`` as an alias.
+最后， ``aliases`` 键⽤于当考虑对称性时引⽤此亚点阵模型可以描述的其他相。
+这里使用Aliases来描述 ``BCC_A2`` 和 ``FCC_A1``，它们分别是 ``BCC_B2`` 和 ``FCC_L12`` 的无序相。
+注意aliased相在输入文件中没有其他描述。
+多个相可以有相同的aliases相，例 ``FCC_L12`` 和 ``FCC_L10`` 同时可以将 ``FCC_A1`` 作为alias。
 
 .. code-block:: JSON
 
@@ -99,10 +99,10 @@ Multiple phases can exist with aliases to the same phase, e.g. ``FCC_L12`` and `
 单位
 =====
 
-- Energies are in ``J/mol-atom`` (and the derivatives follow)
-- All compositions are mole fractions
-- Temperatures are in Kelvin
-- Pressures in Pascal
+- 能量单位为J/mol-atom（其导数也是如此）
+- 所有的组分都为摩尔分数
+- 温度单位为Kelvin
+- 压力单位为Pascal
 
 .. _non_equilibrium_thermochemical_data:
 
