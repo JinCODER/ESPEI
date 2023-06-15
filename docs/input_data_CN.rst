@@ -109,24 +109,24 @@ ESPEI⽀持检查所有输入数据集的错误，在运⾏ESPEI之前应始终�
 非平衡热化学数据
 ===================================
 
-Non-equilibrium thermochemical data is used where the internal degrees of freedom for a phase are known. This type of data is the only data that can be used for parameter generation, but it can also be used in Bayesian parameter estimation.
+非平衡热化学数据⽤于已知相的内部⾃由度的情况。这种类型的数据是⽣成参数的唯⼀数据，但也可以在⻉叶斯参数估计中使⽤。
 
-Two examples follow. The first dataset has some data for the formation heat capacity for BCC_B2.
+以下是两个⽰例。第⼀个数据集中包含了⼀些BCC_B2的形成热容数据。
 
-* The ``components`` and ``phases`` keys simply describe those found in this entry.
-* Use the ``reference`` key for bookkeeping the source of the data.
-* The ``comment`` key and value can be used anywhere in the data to keep notes for your reference. It takes no effect.
-* The ``solver`` the internal degrees of freedom and and site ratios are described for the phase.
+* ``components`` 和 ``phases`` 键仅描述了该条⽬中包含的组分和相。
+* 使用 ``reference`` 键记录数据的来源信息。
+* ``comment`` 键和值可在数据的任何位置⽤于保留您的参考注释，它不会产⽣任何影响。
+* ``solver`` 描述了相的内部⾃由度和站点比例。
 
-   ``sublattice_configurations`` is a list of different configurations, that should correspond to the sublattices for the phase descriptions.
-   Non-mixing sublattices are represented as a string, while mixing sublattices are represented as a lists.
-   Thus an endmember for ``BCC_B2`` (as in this example) is ``["AL", "NI", VA"]`` and if there were mixing (as in the next example) it might be ``["AL", ["AL", "NI"], "VA"]``.
-   Mixing also means that the ``sublattice_occupancies`` key must be specified, but that is not the case in this example.
-   It is important to note that any mixing configurations must have any ideal mixing contributions removed.
-   Regardless of whether there is mixing or not, the length of this list should always equal the number of sublattices in the phase, though the sub-lists can have mixing up to the number of components in that sublattice.
-   Note that the ``sublattice_configurations`` is a *list* of these lists.
-   That is, there can be multiple sublattice configurations in a single dataset.
-   See the second example in this section for such an example.
+   ``sublattice_configurations`` 是⼀个不同配置的列表，应与相描述中的亚点阵对应。
+   非混合亚点阵表⽰为字符串，⽽混合亚点阵表⽰为列表。
+   因此， ``BCC_B2`` 的端元（如本示例）是 ``["AL", "NI", VA"]`` ，如果有混合（如下一个示例）可能是 ``["AL", ["AL", "NI"], "VA"]``。
+   混合还意味着必须指定 ``sublattice_occupancies`` 键，但本⽰例中不需要。
+   重要的是，所有混合的配置都必须删除理想混合贡献。
+   ⽆论是否存在混合，该列表的⻓度始终应与相中的亚点阵相符，尽管⼦列表可以在该亚格中具有与该亚点阵中的组分数相同的混合。
+   注意， ``sublattice_configurations`` 是这些列表的列表。 
+   也就是说，单个数据集中可以有多个亚点阵配置。
+   请参阅本节的第⼆个⽰例。
 
 * The ``conditions`` describe temperatures (``T``) and pressures (``P``) as either scalars or one-dimensional lists.
 * The type of quantity is expressed using the ``output`` key. This can in principle be any thermodynamic quantity, but currently only ``CPM*``, ``SM*``, and ``HM*`` (where ``*`` is either nothing, ``_MIX`` or ``_FORM``) are supported. Support for changing reference states is planned but not yet implemented, so all thermodynamic quantities must be formation quantities (e.g. ``HM_FORM`` or ``HM_MIX``, etc.). This is tracked by :issue:`85` on GitHub.
