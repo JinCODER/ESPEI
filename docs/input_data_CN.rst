@@ -128,10 +128,11 @@ ESPEI⽀持检查所有输入数据集的错误，在运⾏ESPEI之前应始终�
    也就是说，单个数据集中可以有多个亚点阵配置。
    请参阅本节的第⼆个⽰例。
 
-* The ``conditions`` describe temperatures (``T``) and pressures (``P``) as either scalars or one-dimensional lists.
-* The type of quantity is expressed using the ``output`` key. This can in principle be any thermodynamic quantity, but currently only ``CPM*``, ``SM*``, and ``HM*`` (where ``*`` is either nothing, ``_MIX`` or ``_FORM``) are supported. Support for changing reference states is planned but not yet implemented, so all thermodynamic quantities must be formation quantities (e.g. ``HM_FORM`` or ``HM_MIX``, etc.). This is tracked by :issue:`85` on GitHub.
-* ``values`` is a 3-dimensional array where each value is the ``output`` for a specific condition of pressure, temperature, and sublattice configurations from outside to inside. Alternatively, the size of the array must be ``(len(P), len(T), len(subl_config))``. In the example below, the shape of the ``values`` array is (1, 12, 1) as there is one pressure scalar, one sublattice configuration, and 12 temperatures.
-* There is also a key, ``excluded_model_contributions``, which will make those contributions of pycalphad's ``Model`` not be fit to when doing parameter selection or MCMC. This is useful for cases where the type of data used does not include some specific ``Model`` contributions that parameters may already exist for. For example, DFT formation energies do not include ideal mixing or (CALPHAD-type) magnetic model contributions, but formation energies from experiments would include these contributions so experimental formation energies should not be excluded.
+* ``conditions`` 描述了温度(``T``)和压强(``P``) ，这些可以是标量或一维列表。
+* 使用 ``output`` 键来表⽰数量的类型。这理论上可以是任何热⼒学量，但⽬前仅⽀持 ``CPM*`` ， ``SM*`` ， ``HM*`` （其中 ``*`` 可以是空， ``_MIX`` 或 ``_FORM``）。更新计划中拟将支持更改参考状态，因此所有热⼒学量都必须是形成量（例 ``HM_FORM`` 或者 ``HM_MIX`` 等）。 这在Github的 issue:`85` 有记录。
+* ``values``是⼀个三维数组，其中每个值是来⾃外到内的特定压⼒、温度和亚格配置的输出。或者，数组的⼤⼩必须为 ``(len(P), len(T), len(subl_config))``。在下⾯的⽰例中， ``values`` 数字形状为 (1, 12, 1) ），其含义是有⼀个压⼒标量，⼀个亚点阵配置和12个温度。
+* 还有⼀个 ``excluded_model_contributions`` 键， 当进⾏参数选择或MCMC时，将不对这些贡献的pycalphad的模型进⾏拟合。这对于所使⽤的数据类型不包括某些特定模型贡献的情况非常有⽤，⽽参数
+可能已经存在于这些贡献中。例如，DFT形成能量不包括理想混合或（CALPHAD类型的）磁转变贡献，实验形成能会包括这些贡献，因此不应排除实验形成能。
 
 .. code-block:: JSON
 
@@ -166,17 +167,17 @@ ESPEI⽀持检查所有输入数据集的错误，在运⾏ESPEI之前应始终�
     }
 
 
-In the second example below, there is formation enthalpy data for multiple sublattice configurations.
-All of the keys and values are conceptually similar.
-Here, instead of describing how the ``output`` quantity changes with temperature or pressure, we are instead only comparing ``HM_FORM`` values for different sublattice configurations.
-The key differences from the previous example are that there are 9 different sublattice configurations described by ``sublattice_configurations`` and ``sublattice_occupancies``.
-Note that the ``sublattice_configurations`` and ``sublattice_occupancies`` should have exactly the same shape.
-Sublattices without mixing should have single strings and occupancies of one.
-Sublattices that do have mixing should have a site ratio for each active component in that sublattice.
-If the sublattice of a phase is ``["AL", "NI", "VA"]``, it should only have two occupancies if only ``["AL", "NI"]`` are active in the sublattice configuration.
+在下⾯的第⼆个⽰例中，存在多个亚晶格配置的形成焓数据。
+所有的键和值在概念上是相似的。
+在这⾥，我们只比较不同亚点阵配置下的 ``HM_FORM`` 值，而不描述 ``output`` 量随温度或压强的变化。
+与前⼀个⽰例相比，主要的区别在于通过 ``sublattice_configurations`` 和 ``sublattice_occupancies`` 描述了9种不同的亚点阵配置。
+请注意， ``sublattice_configurations`` 和 ``sublattice_occupancies`` 应该具有完全相同的形状。
+没有混合的亚点阵应该只有单个字符串和占有率为1。
+具有混合的亚点阵应该对该亚点阵中的每个激活的组分有⼀个位点比例。
+如果⼀个相的亚点阵是 ``["AL", "NI", "VA"]`` ，那么只有在亚点阵配置中只有 ``["AL", "NI"]`` 是激活的情况下，他才应该具有两个点位占有率。
 
-The last difference to note is the shape of the ``values`` array.
-Here there is one pressure, one temperature, and 9 sublattice configurations to give a shape of (1, 1, 9).
+最后需要注意的是 ``values`` 数组的形状。
+在这⾥，有⼀个压⼒，⼀个温度和9个亚点阵配置，形状为 (1, 1, 9)。
 
 .. code-block:: JSON
 
