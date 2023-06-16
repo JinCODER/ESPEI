@@ -277,33 +277,29 @@ ESPEI 能够考虑具有任意数量平衡相的多组分相图数据。
 相图数据的JSON数据集通过使⽤ ``"output": "ZPF"`` [1]_进行区分。
 JSON ``values`` 种的每个条目对应于一个相区，在给定的温度和压力条件下，一个或多个相处于平衡状态。
 
-相区种的每个相都必须给出其 *phase composition* ，即该相的内部组成
-internal composition of that phase (*not* the overall composition).
-The "phase composition" is the same as a "tie-line composition" in a two-phase
-region of a binary phase diagram, but is a more general term for cases where
-the meaning of a tie-line is ambiguous like a single phase equilibrum or an
-equilibrium with three or more phases.
+相区种的每个相都必须给出其 *相组成* ，即该相的内部组成（*不是* 整体组成）。
+"phase composition" 与二元相图中两相区域的 "tie-line composition" 相同，
+但对于在意义上不明确的情况，
+例如单相平衡或三相及更多相平衡，它更是一个一般的术语。
 
-Sometimes there may be a phase equilibrium where one or more of the phase
-compositions are unknown. This is especially common for phase diagram data
-determined by equilibrated alloys or by scanning calorimetry in binary systems,
-where one phase composition is determined, but the phase composition of the
-other phase(s) in equilibrium are not. In these cases, phase compositions can
-be given as ``null`` and ESPEI will estimate the phase composition.
+有时可能存在⼀个相平衡，其中⼀个或多个相组成是未知的。
+这在通过平衡合⾦或⼆元系统中的扫描量热法确定相图数据时尤其常⻅，
+其中确定了⼀个相的组成，但未确定平衡相的其他相的组成。在这些情况下，
+可以将相组成设置成``null`` ，ESPEI将估计相组成。
 
 .. admonition:: Important
    :class: important
 
-   Each phase region must have at least one phase with a prescribed phase composition.
-   If all phases in a phase region have ``null`` phase compositions, the
+   每个相区必须至少有一个具体规定相组成的相成分。
+   如果相区中的所有相态都使用了 ``null`` 描述相成分，将不会定义
    *target hyperplane* (described by Figure 1 in [Bocklund2019]_)
-   will be undefined and no driving forces will be computed.
+   且不会计算出任何驱动力。
 
 .. admonition:: Important
    :class: important
 
-   For a dataset with ``c`` components, each phase composition must be specified by ``c-1`` components.
-   There is an implicit ``N=1`` condition.
+   对于一个具有 ``c`` 个组分的数据集， 每个相组成必须由 ``c-1`` 个组分来确定。
+   此处有一个隐含的条件 ``N=1`` 。
 
 Example
 -------
@@ -327,26 +323,26 @@ Example
      "reference": "37ALE"
    }
 
-Each entry in the ``values`` list is a list of all phases in equilibrium in a phase region.
-There are four phase regions:
+``values`` 列表中的每个条⽬都是相区域中处于平衡状态的所有相的列表。
+这⾥有四个相区域：
 
 ``[["LIQUID", ["NI"], [0.5]]]``
-   Single phase equilibrium with ``LIQUID`` having a phase composition of ``X(NI,LIQUID)=0.5``.
+   单相平衡， ``LIQUID`` 的相组成是 ``X(NI,LIQUID)=0.5``.
 
 ``[["AL3NI2", ["NI"], [0.4083]], ["BCC_B2", ["NI"], [0.4340]]]``
-   Two phase equilibrium between ``AL3NI2`` and ``BCC_B2``, which have phase compositions of ``X(NI,AL3NI2)=0.4083`` and ``X(NI,BCC_B2)=0.4340``, respectively.
+   表示 ``AL3NI2`` 与 ``BCC_B2`` 之间的两相平衡，它们的相组成分别为 ``X(NI,AL3NI2)=0.4083`` 和 ``X(NI,BCC_B2)=0.4340`` 。
 
 ``[["AL3NI2", ["NI"], [0.4114]], ["BCC_B2", ["NI"], [null]]]``
-   Two phase equilibrium between ``AL3NI2`` and ``BCC_B2`` where the phase composition of ``BCC_B2`` is unknown.
+   表示 ``AL3NI2`` 和 ``BCC_B2`` 之间的两相平衡，其中 ``BCC_B2`` 的相组成是位置的。
 
 ``[["BCC_B2", ["NI"], [0.71]], ["LIQUID", ["NI"], [0.752]], ["FCC_L12", ["NI"], [0.76]]]``
-   Eutectic reaction between ``LIQUID``, ``BCC_B2`` and ``FCC_L12``.
+   表示 ``LIQUID`` ， ``BCC_B2`` 和 ``FCC_L12`` 之间的共晶反应。
 
-.. admonition:: Tip: Multi-component phase regions
+.. admonition:: Tip: 多组分相区
    :class: Tip
 
-   To describe multi-component phase regions, simply include more components and compositions in each phase composition.
-   For example, a two-phase equilibrium in a three component system could be described by
+   要描述多组分相图，只需要在每个相组成中包含更多的组分和组成。
+   例如，一个三组分体系中的两相平衡可以用以下方式描述：
    ``[["ALPHA", ["CR", "NI"], [0.1, 0.25]], ["BETA", ["CR", "NI"], [null, null]]]``
 
 .. _Datasets Tags:
@@ -354,12 +350,11 @@ There are four phase regions:
 Tags键
 ====
 
-Tags are a flexible method to adjust many ESPEI datasets simultaneously and drive them via the ESPEI's input YAML file.
-Each dataset can have a ``"tags"`` key, with a corresponding value of a list of tags, e.g. ``["dft"]``.
-Any tag modifications present in the input YAML file are applied to the datasets before ESPEI is run.
+Tags是⼀种灵活的⽅法，可以通过ESPEI的输入YAML文件同时调整多个ESPEI数据集并驱动它们。
+每个数据集可以用一个 ``"tags"`` 键， 其对应的值是一个标签列表，例如 ``["dft"]``。
+YAML输入文件中的任何标签修改都会在运⾏ESPEI之前应⽤到数据集上。
 
-They can be used in many creative ways, but some suggested ways include to add weights or to exclude model contributions, e.g. for DFT data that should not have contributions for a CALPHAD magnetic model or ideal mixing energy.
-An example of using the tags in an input file looks like:
+标签可以以多种创造性的⽅式使⽤，但⼀些建议的⽤法包括添加权重或排除模型贡献，例如对于不应该具有CALPHAD磁性模型或理想混合能贡献的DFT数据。以下是在输入文件中使⽤标签的⽰例：
 
 .. code-block:: JSON
 
@@ -375,7 +370,7 @@ An example of using the tags in an input file looks like:
    }
 
 
-An example input YAML looks like
+一个YAML输入文件实例：
 
 .. code-block:: YAML
 
@@ -394,7 +389,7 @@ An example input YAML looks like
      verbosity: 2
      output_db: out.tdb
 
-This will add the key ``"excluded_model_contributions"`` to all datasets that have the ``"dft"`` tag:
+这将会把 ``"excluded_model_contributions"`` 键添加到所有存在 ``"dft"`` tag的数据集中了。
 
 .. code-block:: JSON
 
