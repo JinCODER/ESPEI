@@ -273,13 +273,11 @@ ESPEI⽀持检查所有输入数据集的错误，在运⾏ESPEI之前应始终�
 相图数据
 ==================
 
-ESPEI can consider multi-component phase diagram data with an arbitrary number of phases in equilibrium.
-Phase diagram data JSON datasets are distingished by using ``"output": "ZPF"`` [1]_.
-Each entry in the JSON ``values`` corresponds to a *phase region* where one or
-more phases are participating in equilibrium under the given temperature and
-pressure conditions.
+ESPEI 能够考虑具有任意数量平衡相的多组分相图数据。
+相图数据的JSON数据集通过使⽤ ``"output": "ZPF"`` [1]_进行区分。
+JSON ``values`` 种的每个条目对应于一个相区，在给定的温度和压力条件下，一个或多个相处于平衡状态。
 
-Each phase in the phase region must give its *phase composition*, i.e. the
+相区种的每个相都必须给出其 *phase composition* ，即该相的内部组成
 internal composition of that phase (*not* the overall composition).
 The "phase composition" is the same as a "tie-line composition" in a two-phase
 region of a binary phase diagram, but is a more general term for cases where
