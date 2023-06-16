@@ -225,23 +225,23 @@ ESPEI⽀持检查所有输入数据集的错误，在运⾏ESPEI之前应始终�
 平衡热化学数据
 ===============================
 
-Equilibrium thermochemical data is used when the internal degrees of freedom are not known. This is typically true for experimental thermochemical data. Some cases where this type of data is useful, compared to non-equilibrium thermochemical data are:
+当内部⾃由度未知时，使⽤平衡热化学数据。这通常适⽤于实验热化学数据。与非平衡热化学数据相比，以下情况下使⽤此类数据更为有效：
 
-1. Activity data
-#. Enthalpy of formation data in region with two or more phases in equilibrium
-#. Enthalpy of formation for a phase with multiple sublattice, e.g. the σ phase
+1. 活度数据
+#. 在存在两个或多个平衡相的区域种的形成焓数据
+#. 具有多个亚点阵的相的形成焓，例如 σ 相
 
 
-This type of data can not be used in parameter selection, because a core assumption of parameter selection is that the site fractions are known.
+这类数据不能⽤于参数选择，因为参数选择的核⼼假设是已知位点分数。
 
 
 .. note::
 
-  Only activity data is supported at the moment. Support for other data types is tracked by :issue:`104`.
+  目前只支持活度数据。对其他类型的数据的支持开发进度请见 :issue:`104`
 
-Activity data is similar to non-equilibrium thermochemical data, except we must enter a reference state and the ``solver`` key is no longer required, since we do not know the internal degrees of freedom. A key detail is that the ``phases`` key must specify all phases that are possible to form.
+活度数据与非平衡热化学数据类似，唯⼀的区别是我们需要输入参考态，并且不再需要 ``solver`` 键，因为我们不知道自由度。其中有一个细节很关键 ``phases`` 键必须指定所有可能形成的相。
 
-An example for Mg activties in Cu-Mg follows, with data digitized from S.P. Garg, Y.J. Bhatt, C. V. Sundaram, Thermodynamic study of liquid Cu-Mg alloys by vapor pressure measurements, Metall. Trans. 4 (1973) 283–289. doi:10.1007/BF02649628.
+以下是关于Cu-Mg种Mg活度的示例，数据来源于：S.P. Garg, Y.J. Bhatt, C. V. Sundaram, Thermodynamic study of liquid Cu-Mg alloys by vapor pressure measurements, Metall. Trans. 4 (1973) 283–289. doi:10.1007/BF02649628.
 
 .. code-block:: JSON
 
